@@ -1,1 +1,1 @@
-## FastAPI client app for Github
+## Github FastAPI app
