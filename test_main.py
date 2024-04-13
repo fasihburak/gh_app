@@ -55,3 +55,13 @@ async def test_search_timeout(anyio_backend):
         mocked.get(url=pattern, exception=TimeoutError)
         with pytest.raises(TimeoutError):
             response = client.get("/search/repositories/?top=10&from_date=2023-12-31")
+
+@pytest.mark.anyio
+async def test_search_status_code(anyio_backend):
+    client = TestClient(app)
+    with aioresponses() as mocked:
+        pattern = re.compile(r'')
+        mocked.get(url=pattern, status=404, body='{"test": false}')
+        response = client.get("/search/repositories/?top=10&from_date=2023-12-31")
+        assert response.status_code == 404
+        assert response.json() == {"test": False}

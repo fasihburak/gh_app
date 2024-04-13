@@ -1,5 +1,6 @@
 import os
 from fastapi import FastAPI, Depends
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from enum import Enum
@@ -59,6 +60,6 @@ async def search_repositories(query_params: QueryParams = Depends()):
     async with aiohttp.ClientSession(base_url=base_url) as session:
         async with session.get(url='/search/repositories' + query_str) as response:
             print("WHOLE URL", response.url)
-            res = await response.json()
-            return res
+            payload = await response.json()
+            return JSONResponse(status_code=response.status, content=payload)
 
